@@ -23,19 +23,7 @@ public class Enemy : MonoBehaviour
 
     private void Initialize()
     {
-        speed = config.speed;
-        health = config.health;
-
-        if (spriteRenderer.Equals(null))
-        {
-            Debug.LogWarning("Sprite Renderer is not assigned for the enemy, getting component which is not optimal.");
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            spriteRenderer.sprite = config.sprite;
-        }
-        else
-        {
-            spriteRenderer.sprite = config.sprite;
-        }
+        ResetValues();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -62,10 +50,29 @@ public class Enemy : MonoBehaviour
 
     public void ResetValues()
     {
-        //reseting values before adding to pool again
+        //reseting values to ensure playability 
         speed = config.speed;
         health = config.health;
-        spriteRenderer.sprite = config.sprite;
-        boxCollider.enabled = true; // Re-enable collider for future use
+
+        if (spriteRenderer.Equals(null))
+        {
+            Debug.LogWarning("Sprite Renderer is not assigned for the enemy, getting component which is not optimal.");
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            spriteRenderer.sprite = config.sprite;
+        }
+        else
+        {
+            spriteRenderer.sprite = config.sprite;
+        }
+
+        if (boxCollider.Equals(null))
+        {
+            Debug.LogWarning("Box Collider 2D is not assigned for the enemy, getting component which is not optimal.");
+            boxCollider = GetComponent<BoxCollider2D>();
+        }
+        else
+        {
+            boxCollider.enabled = true; // Ensure the collider is enabled
+        }
     }
 }

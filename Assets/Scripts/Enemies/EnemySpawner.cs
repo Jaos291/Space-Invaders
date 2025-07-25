@@ -15,15 +15,16 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemyFromPool()
     {
+        Debug.Log("Here");
         int rows = GameManager.Instance.LevelConfig.maxEnemies / GameManager.Instance.LevelConfig.rows; //Max lines
         int columns = GameManager.Instance.LevelConfig.maxEnemiesPerRow; //Max columns
 
-        for (int j = 0; j < rows; j++)
+        for (int j = 0; j < rows/2; j++)
         {
             for (int i = 0; i < columns; i++)
             {
                 var Enemy = GameManager.Instance.EnemyPool.GetEnemy();
-                Vector3 startingPosition = new Vector3(columns+i,rows,0);
+                Vector3 startingPosition = new Vector3(columns+i,rows-j,0);
                 Enemy.transform.position = startingPosition;
             }
         }
