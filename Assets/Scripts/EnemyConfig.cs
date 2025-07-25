@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName ="New Enemy", menuName ="Enemy Configuration")]
-public class EnemyConfig : MonoBehaviour
+public class EnemyConfig : ScriptableObject
 {
     public int identifier;
     public float speed;

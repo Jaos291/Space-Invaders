@@ -5,11 +5,16 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public EnemyConfig config;
+
+    [Header("References")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private BoxCollider2D boxCollider;
 
     private float speed;
     private float health;
-    [SerializeField] private SpriteRenderer spriteRenderer;
+
+    [Header("Enemy Configuration File")]
+    public EnemyConfig config;
 
     private void Start()
     {
@@ -33,6 +38,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        TakeDamage(10f);
+        Debug.Log("Logged damage!");
+    }
+
     public void TakeDamage(float damage)
     {
         health -= damage;
@@ -44,6 +55,17 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        //Destroy enemy here or use object pooling
+        boxCollider.enabled = false; // Disable collider to prevent further interactions
+        ResetValues();
+        GameManager.Instance.EnemyPool.AddToPool(gameObject);
+    }
+
+    public void ResetValues()
+    {
+        //reseting values before adding to pool again
+        speed = config.speed;
+        health = config.health;
+        spriteRenderer.sprite = config.sprite;
+        boxCollider.enabled = true; // Re-enable collider for future use
     }
 }

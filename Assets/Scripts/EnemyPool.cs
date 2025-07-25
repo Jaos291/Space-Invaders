@@ -31,7 +31,7 @@ public class EnemyPool : MonoBehaviour
         }
     }
 
-    private void AddToPool(GameObject instance)
+    public void AddToPool(GameObject instance)
     {
         instance.SetActive(false);
         availableEnemies.Enqueue(instance);
