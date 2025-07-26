@@ -9,12 +9,34 @@ public class Enemy : MonoBehaviour
     [Header("References")]
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private BoxCollider2D boxCollider;
+    [SerializeField] private Rigidbody2D rigidbody2D;
 
     private float speed;
     private float health;
 
     [Header("Enemy Configuration File")]
     public EnemyConfig config;
+
+    private void Awake()
+    {
+        if(spriteRenderer == null)
+        {
+            Debug.LogWarning("Sprite Renderer is not assigned for the enemy, getting component which is not optimal.");
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+
+        if(boxCollider == null)
+        {
+            Debug.LogWarning("Box Collider 2D is not assigned for the enemy, getting component which is not optimal.");
+            boxCollider = GetComponent<BoxCollider2D>();
+        }
+
+        if (rigidbody2D == null)
+        {
+            Debug.LogWarning("Rigidbody2D is not assigned for the enemy, getting component which is not optimal.");
+            rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+    }
 
     private void Start()
     {

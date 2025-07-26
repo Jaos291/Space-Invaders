@@ -42,6 +42,7 @@ public class EnemyBulletPooling : MonoBehaviour
 
         var instance = enemiesBullets.Dequeue();
         instance.SetActive(true);
+        instance.transform.SetParent(null); // Detach from the pool parent
         return instance;
     }
 }

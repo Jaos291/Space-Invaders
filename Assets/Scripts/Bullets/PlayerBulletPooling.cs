@@ -42,6 +42,7 @@ public class PlayerBulletPooling : MonoBehaviour
 
         var instance = playerBullets.Dequeue();
         instance.SetActive(true);
+        instance.transform.SetParent(null); // Detach from the pool parent
         return instance;
     }
 }

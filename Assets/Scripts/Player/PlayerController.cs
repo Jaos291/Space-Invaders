@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [Header("Player configuration")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float[] sideBoundary;
+    [SerializeField] private Rigidbody2D rigidbody2D;
+    [SerializeField] private BoxCollider2D boxCollider2D;
 
     [Header("Bullet")]
     [SerializeField] private GameObject bullet;
@@ -17,8 +19,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]private PlayerInput playerInput;
     private Vector2 moveInput;
-    float moveHorizontal;
-    float posX;
+    private float moveHorizontal;
+    private float posX;
+    private Vector3 initialPosition;
 
     private void Awake()
     {
@@ -27,6 +30,23 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("PlayerInput component is not assigned. Attempting to get it from the GameObject.");
             playerInput = GetComponent<PlayerInput>();
         }
+
+        if(rigidbody2D.Equals(null))
+        {
+            Debug.LogWarning("Rigidbody2D component is not assigned. Attempting to get it from the GameObject.");
+            rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+
+        if (boxCollider2D.Equals(null))
+        {
+            Debug.LogWarning("BoxCollider2D component is not assigned. Attempting to get it from the GameObject.");
+            boxCollider2D = GetComponent<BoxCollider2D>();
+        }
+    }
+
+    private void Start()
+    {
+        initialPosition = transform.position;
     }
 
     private void Update()
@@ -52,5 +72,11 @@ public class PlayerController : MonoBehaviour
         posX = Mathf.Clamp(posX, sideBoundary[0], sideBoundary[1]);
 
         transform.position = new Vector3(posX, transform.position.y, transform.position.z);
+    }
+
+    private void RestartPosition()
+    {
+        // Reset player position to the center of the screen
+        transform.position = initialPosition;
     }
 }
