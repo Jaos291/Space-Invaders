@@ -91,7 +91,12 @@ public class Enemy : MonoBehaviour, IDamageable
         boxCollider.enabled = false;
         ResetValues();
         if (GameManager.Instance != null && GameManager.Instance.EnemySpawner != null)
+        {
             GameManager.Instance.EnemySpawner.NotifyEnemyDefeated();
+            var player = GameManager.Instance.player.GetComponent<PlayerController>();
+            if (player != null)
+                player.AddScore(100);
+        }
         GameManager.Instance.EnemyPool.AddToPool(gameObject);
     }
 

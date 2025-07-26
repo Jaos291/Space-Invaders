@@ -19,12 +19,10 @@ public class PlayerBulletPooling : MonoBehaviour
 
     private void GrowPool()
     {
-
         var instanceToAdd = Instantiate(playerBulletsPrefab);
         instanceToAdd.transform.SetParent(transform);
         AddToPool(instanceToAdd);
         instanceToAdd.GetComponent<Bullet>().playerBulletPooling = this; // Set the player bullet pooling reference
-
     }
 
     public void AddToPool(GameObject instance)
@@ -42,7 +40,17 @@ public class PlayerBulletPooling : MonoBehaviour
 
         var instance = playerBullets.Dequeue();
         instance.SetActive(true);
-        instance.transform.SetParent(null); // Detach from the pool parent
+        instance.transform.SetParent(GameManager.Instance.playerBulletsParent); // Attach to player bullets parent
         return instance;
+    }
+
+    public void ReturnAllBulletsToPool()
+    {
+        // Return all active bullets under the player bullets parent to the pool
+        foreach (Transform bullet in GameManager.Instance.playerBulletsParent)
+        {
+            if (bullet.gameObject.activeInHierarchy)
+                AddToPool(bullet.gameObject);
+        }
     }
 }

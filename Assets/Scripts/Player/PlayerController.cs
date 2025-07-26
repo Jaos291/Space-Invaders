@@ -6,8 +6,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour, IDamageable
 {
+    public static event System.Action<int> OnLivesChanged;
+    public static event System.Action OnPlayerDied;
+    public static event System.Action<int> OnScoreChanged;
     [Header("Player configuration")]
     [SerializeField] private int health = 10;
+    [SerializeField] private int lives = 3;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    public bool canPlay = true;
+    private int score = 0;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float[] sideBoundary;
     [SerializeField] private Rigidbody2D rigidbody2D;
@@ -85,15 +92,49 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damageAmount)
     {
+        if (!canPlay) return;
         health -= damageAmount;
         if (health <= 0)
         {
-            Die();
+            lives--;
+            OnLivesChanged?.Invoke(lives);
+            if (lives > 0)
+            {
+                StartCoroutine(InvulnerabilityCoroutine());
+                health = 10;
+            }
+            else
+            {
+                Die();
+            }
         }
+    }
+
+    private IEnumerator InvulnerabilityCoroutine()
+    {
+        canPlay = false;
+        boxCollider2D.enabled = false;
+        float blinkTime = 0.2f;
+        float timer = 0f;
+        for (int i = 0; i < 15; i++)
+        {
+            spriteRenderer.enabled = !spriteRenderer.enabled;
+            yield return new WaitForSeconds(blinkTime);
+            timer += blinkTime;
+        }
+        spriteRenderer.enabled = true;
+        boxCollider2D.enabled = true;
+        canPlay = true;
     }
 
     private void Die()
     {
+        OnPlayerDied?.Invoke();
         Destroy(gameObject);
+    }
+    public void AddScore(int amount)
+    {
+        score += amount;
+        OnScoreChanged?.Invoke(score);
     }
 }

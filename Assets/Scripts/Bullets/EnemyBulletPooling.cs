@@ -40,7 +40,17 @@ public class EnemyBulletPooling : MonoBehaviour
 
         var instance = enemiesBullets.Dequeue();
         instance.SetActive(true);
-        instance.transform.SetParent(null); // Detach from the pool parent
+        instance.transform.SetParent(GameManager.Instance.enemiesBulletsParent); // Attach to enemy bullets parent
         return instance;
+    }
+
+    public void ReturnAllBulletsToPool()
+    {
+        // Return all active bullets under the enemy bullets parent to the pool
+        foreach (Transform bullet in GameManager.Instance.enemiesBulletsParent)
+        {
+            if (bullet.gameObject.activeInHierarchy)
+                AddToPool(bullet.gameObject);
+        }
     }
 }

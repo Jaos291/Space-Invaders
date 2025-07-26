@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Level 8
   m_EditorClassIdentifier: 
   currentLevel: 1
-  levelSpeed: 1
+  levelSpeed: 1.7
   initialCountdown: 5
   maxEnemies: 40
   maxEnemiesPerRow: 10

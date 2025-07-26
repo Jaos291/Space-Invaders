@@ -5,9 +5,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Bullet Parents")]
+    public Transform playerBulletsParent;
+    public Transform enemiesBulletsParent;
     [SerializeField] private LevelConfig[] levelConfig;
     [SerializeField] private EnemyPool enemyPool;
-    [SerializeField] private GameObject player;
+    [SerializeField] public GameObject player;
     [SerializeField] private EnemySpawner enemySpawner;
 
     public static GameManager Instance { get; private set; }

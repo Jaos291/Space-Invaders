@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] private PlayerBulletPooling playerBulletPooling;
+    [SerializeField] private EnemyBulletPooling enemyBulletPooling;
     [SerializeField] private Transform initialPosition;
     [SerializeField] private EnemyGroupController enemyGroupController;
     [SerializeField] private int currentLevelIndex = 0;
     [SerializeField] private int rowDivisor = 2;
     [SerializeField] private int rowOffset = 1;
 
-
     private int column;
     private List<Enemy> spawnedEnemies = new List<Enemy>();
     private int defeatedEnemies = 0;
+
+    public static event System.Action<int> OnLevelChanged;
 
     private void Start()
     {
@@ -29,8 +32,11 @@ public class EnemySpawner : MonoBehaviour
         if (defeatedEnemies >= levelConfig.maxEnemies)
         {
             currentLevelIndex++;
+            OnLevelChanged?.Invoke(currentLevelIndex+1);
             defeatedEnemies = 0;
             spawnedEnemies.Clear();
+            playerBulletPooling?.ReturnAllBulletsToPool();
+            enemyBulletPooling?.ReturnAllBulletsToPool();
             enemyGroupController = FindObjectOfType<EnemyGroupController>();
             enemyGroupController.enabled = true;
             SpawnEnemyFromPool();
