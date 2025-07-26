@@ -338,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3f7c62a71b62ad4ba848ac5664a1de9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 10
   moveSpeed: 5
   sideBoundary:
   - 6.55
@@ -485,6 +486,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelConfig: {fileID: 11400000, guid: 54833fdfaf581854da2b40a1e12b184f, type: 2}
   enemyPool: {fileID: 1285088994}
+  player: {fileID: 0}
 --- !u!1 &1285088992
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,6 +498,7 @@ GameObject:
   - component: {fileID: 1285088993}
   - component: {fileID: 1285088994}
   - component: {fileID: 1285088995}
+  - component: {fileID: 1285088996}
   m_Layer: 0
   m_Name: EnemyPoolManager
   m_TagString: Untagged
@@ -549,6 +552,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialPosition: {fileID: 661413412}
+  enemyGroupController: {fileID: 1285088996}
+--- !u!114 &1285088996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1285088992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e8105e4922e2304b83535ab74fd3bec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 1
+  moveDistance: 0.2
+  moveDownDistance: 0.5
+  moveInterval: 0.5
+  leftBound: 6.25
+  rightBound: 22
 --- !u!1 &1582725576
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private Transform initialPosition;
+    [SerializeField] private EnemyGroupController enemyGroupController;
 
     private int column;
 
@@ -25,6 +26,9 @@ public class EnemySpawner : MonoBehaviour
                 var Enemy = GameManager.Instance.EnemyPool.GetEnemy();
                 Vector3 startingPosition = new Vector3(columns+i,rows-j,0);
                 Enemy.transform.position = startingPosition;
+
+                var enemy = Enemy.GetComponent<Enemy>();
+                enemyGroupController.RegisterEnemy(enemy);
             }
         }
     }
