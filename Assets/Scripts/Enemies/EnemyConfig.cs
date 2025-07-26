@@ -9,4 +9,5 @@ public class EnemyConfig : ScriptableObject
     public float speed;
     public Sprite sprite;
     public int health;
+    public float fireRate;
 }

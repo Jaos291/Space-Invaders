@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerBulletPooling : MonoBehaviour
 {
-    [SerializeField] private GameObject[] playerBulletsPrefab;
+    [SerializeField] private GameObject playerBulletsPrefab;
     [SerializeField] private int initialBulletPoolSize = 10;
 
     private Queue<GameObject> playerBullets = new Queue<GameObject>();
@@ -19,12 +19,12 @@ public class PlayerBulletPooling : MonoBehaviour
 
     private void GrowPool()
     {
-        for (int j = 0; j < initialBulletPoolSize; j++)
-        {
-            var instanceToAdd = Instantiate(playerBulletsPrefab[j]);
-            instanceToAdd.transform.SetParent(transform);
-            AddToPool(instanceToAdd);
-        }
+
+        var instanceToAdd = Instantiate(playerBulletsPrefab);
+        instanceToAdd.transform.SetParent(transform);
+        AddToPool(instanceToAdd);
+        instanceToAdd.GetComponent<Bullet>().playerBulletPooling = this; // Set the player bullet pooling reference
+
     }
 
     public void AddToPool(GameObject instance)
@@ -33,7 +33,7 @@ public class PlayerBulletPooling : MonoBehaviour
         playerBullets.Enqueue(instance);
     }
 
-    public GameObject GetEnemy()
+    public GameObject GetBullet()
     {
         if (playerBullets.Count.Equals(0))
         {

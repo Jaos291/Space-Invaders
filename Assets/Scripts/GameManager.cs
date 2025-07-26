@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private LevelConfig levelConfig;
     [SerializeField] private EnemyPool enemyPool;
+    [SerializeField] private GameObject player;
 
     public static GameManager Instance { get; private set; }
     public LevelConfig LevelConfig => levelConfig;

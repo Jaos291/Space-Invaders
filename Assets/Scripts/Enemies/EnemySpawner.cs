@@ -15,7 +15,6 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemyFromPool()
     {
-        Debug.Log("Here");
         int rows = GameManager.Instance.LevelConfig.maxEnemies / GameManager.Instance.LevelConfig.rows; //Max lines
         int columns = GameManager.Instance.LevelConfig.maxEnemiesPerRow; //Max columns
 

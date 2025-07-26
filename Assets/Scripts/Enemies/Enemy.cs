@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
 
     [Header("References")]
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private Rigidbody2D rigidbody2D;
+    [SerializeField] private Transform enemyShootingPoint;
 
     private float speed;
     private float health;
@@ -38,7 +39,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
         Initialize();
     }
@@ -50,17 +51,8 @@ public class Enemy : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        TakeDamage(10f);
+        TakeDamage(10);
         Debug.Log("Logged damage!");
-    }
-
-    public void TakeDamage(float damage)
-    {
-        health -= damage;
-        if (health <= 0)
-        {
-            Die();
-        }
     }
 
     private void Die()
@@ -95,6 +87,15 @@ public class Enemy : MonoBehaviour
         else
         {
             boxCollider.enabled = true; // Ensure the collider is enabled
+        }
+    }
+
+    public void TakeDamage(int damageAmount)
+    {
+        health -= damageAmount;
+        if (health <= 0)
+        {
+            Die();
         }
     }
 }

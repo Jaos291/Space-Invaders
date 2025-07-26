@@ -4,24 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
     [Header("Player configuration")]
+    [SerializeField] private int health = 10;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float[] sideBoundary;
     [SerializeField] private Rigidbody2D rigidbody2D;
     [SerializeField] private BoxCollider2D boxCollider2D;
 
     [Header("Bullet")]
-    [SerializeField] private GameObject bullet;
+    [SerializeField] private PlayerBulletPooling playerBulletPooling;
     [SerializeField] private Transform bulletSpawnPoint;
-    [SerializeField] private float bulletCadence;
 
     [SerializeField]private PlayerInput playerInput;
     private Vector2 moveInput;
     private float moveHorizontal;
     private float posX;
     private Vector3 initialPosition;
+    private GameObject bullet;
 
     private void Awake()
     {
@@ -60,6 +61,8 @@ public class PlayerController : MonoBehaviour
 
     private void Shoot()
     {
+        bullet = playerBulletPooling.GetBullet();
+        bullet.transform.position = bulletSpawnPoint.position;
         Debug.Log("Player is shooting.");
     }
 
@@ -78,5 +81,19 @@ public class PlayerController : MonoBehaviour
     {
         // Reset player position to the center of the screen
         transform.position = initialPosition;
+    }
+
+    public void TakeDamage(int damageAmount)
+    {
+        health -= damageAmount;
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }
