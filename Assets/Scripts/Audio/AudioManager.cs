@@ -82,7 +82,7 @@ public class AudioManager : MonoBehaviour
                 clip = soundtrackVictory;
                 break;
         }
-        if (clip != null && musicSource.clip != clip)
+        if (clip != null)
         {
             musicSource.clip = clip;
             musicSource.Play();

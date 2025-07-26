@@ -81,6 +81,10 @@ public class EnemySpawner : MonoBehaviour
             return;
         if (gameManager.LevelConfig[currentLevelIndex] == null)
             return;
+
+        // Asegura que la música del nivel suene cada vez que inicia un nuevo nivel
+        AudioManager.Instance.PlayMusic("Gameplay");
+
         var levelConfig = gameManager.LevelConfig[currentLevelIndex];
         rows = levelConfig.maxEnemies / levelConfig.rows;
         columns = levelConfig.maxEnemiesPerRow;
