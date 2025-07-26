@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class LevelCountdownUI : MonoBehaviour
 {
+    [Header("Audio")]
+    [SerializeField] private AudioClip victoryClip;
     // --- Serialized fields ---
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private GameObject backgroundObject;
@@ -22,6 +24,11 @@ public class LevelCountdownUI : MonoBehaviour
     {
         EnemySpawner.OnLevelChanged += OnLevelChanged;
         PlayerController.OnPlayerDied += OnPlayerDied;
+        // Play start screen music al habilitar UI (solo si es la primera vez)
+        if (AudioManager.Instance != null && !AudioManager.Instance.GetComponent<AudioSource>().isPlaying)
+        {
+            AudioManager.Instance.PlayMusic("StartScreen");
+        }
     }
 
     // Unsubscribe from events
@@ -56,6 +63,8 @@ public class LevelCountdownUI : MonoBehaviour
     {
         if (gameOverUI != null)
             gameOverUI.SetActive(true);
+        // Play game over music
+        AudioManager.Instance?.PlayMusic("GameOver");
     }
 
     // --- Public methods ---
@@ -66,6 +75,8 @@ public class LevelCountdownUI : MonoBehaviour
             victoryScreen.SetActive(true);
         if (victoryScoreText != null)
             victoryScoreText.text = score.ToString();
+        // Play victory soundtrack
+        AudioManager.Instance?.PlayMusic("Victory");
     }
 
     // Public trigger for countdown (e.g. from button)
@@ -79,6 +90,8 @@ public class LevelCountdownUI : MonoBehaviour
     {
         if (countdownCoroutine != null)
             StopCoroutine(countdownCoroutine);
+        // Pausa música durante el countdown
+        AudioManager.Instance?.StopMusic();
         countdownCoroutine = StartCoroutine(CountdownRoutine(onComplete));
     }
 
@@ -90,15 +103,33 @@ public class LevelCountdownUI : MonoBehaviour
         countdownText.gameObject.SetActive(true);
         GameManager.Instance.canPlay = false;
         float timer = countdownTime;
+        int lastSecond = -1;
+        bool lastSecondPlayed = false;
         while (timer > 0)
         {
-            countdownText.text = Mathf.CeilToInt(timer).ToString();
+            int seconds = Mathf.CeilToInt(timer);
+            countdownText.text = seconds.ToString();
+            if (seconds != lastSecond)
+            {
+                if (seconds > 1)
+                {
+                    AudioManager.Instance?.PlaySFX("Countdown");
+                }
+                else if (seconds == 1 && !lastSecondPlayed)
+                {
+                    AudioManager.Instance?.PlaySFX("CountdownLastSecond");
+                    lastSecondPlayed = true;
+                }
+                lastSecond = seconds;
+            }
             yield return null;
             timer -= Time.deltaTime;
         }
         countdownText.gameObject.SetActive(false);
         backgroundObject.SetActive(false);
         GameManager.Instance.canPlay = true;
+        // Al terminar el countdown, inicia música de gameplay (siempre)
+        AudioManager.Instance?.PlayMusic("Gameplay");
         onComplete?.Invoke();
     }
 }

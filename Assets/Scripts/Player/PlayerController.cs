@@ -89,6 +89,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         bullet = playerBulletPooling.GetBullet();
         bullet.transform.position = bulletSpawnPoint.position;
         Debug.Log("Player is shooting.");
+        // Play player shoot sound
+        AudioManager.Instance?.PlaySFX("PlayerShoot");
     }
 
     // Move the player horizontally
@@ -117,6 +119,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         {
             lives--;
             OnLivesChanged?.Invoke(lives);
+            // Play player lost life sound
+            AudioManager.Instance?.PlaySFX("PlayerLostLife");
             if (lives > 0)
             {
                 StartCoroutine(InvulnerabilityCoroutine());
@@ -163,6 +167,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Die()
     {
         OnPlayerDied?.Invoke();
+        // Play game over or player death sound if desired
+        AudioManager.Instance?.PlayMusic("GameOver");
         Destroy(gameObject);
     }
 
@@ -178,5 +184,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         lives++;
         OnLivesChanged?.Invoke(lives);
+        // Play add life sound (reuse PlayerLostLife or add a new one if desired)
+        AudioManager.Instance?.PlaySFX("PlayerLostLife");
     }
 }

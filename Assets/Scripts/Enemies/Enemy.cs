@@ -82,6 +82,8 @@ public class Enemy : MonoBehaviour, IDamageable
         {
             bullet.transform.position = enemyShootingPoint != null ? enemyShootingPoint.position : transform.position;
             bullet.SetActive(true);
+            // Play enemy shoot sound
+            AudioManager.Instance?.PlaySFX("EnemyShoot");
         }
     }
 
@@ -94,6 +96,8 @@ public class Enemy : MonoBehaviour, IDamageable
     private void Die()
     {
         boxCollider.enabled = false;
+        // Play enemy destroyed sound
+        AudioManager.Instance?.PlaySFX("EnemyDestroyed");
         if (GameManager.Instance != null && GameManager.Instance.EnemySpawner != null)
         {
             GameManager.Instance.EnemySpawner.NotifyEnemyDefeated();
@@ -102,5 +106,39 @@ public class Enemy : MonoBehaviour, IDamageable
                 player.AddScore(gameManager.scorePerEnemy);
         }
         GameManager.Instance.EnemyPool.AddToPool(gameObject);
+    }
+
+    // Restored: TakeDamage implementation for IDamageable
+    public void TakeDamage(int damageAmount)
+    {
+        health -= damageAmount;
+        // Play damage sound (optional, if you want a hit sound)
+        // AudioManager.Instance?.PlaySFX("EnemyHit");
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    // Restored: ResetValues method
+    public void ResetValues()
+    {
+        // Resetting values to ensure playability 
+        speed = config.speed;
+        health = config.health;
+
+        if (spriteRenderer == null)
+        {
+            Debug.LogWarning("Sprite Renderer is not assigned for the enemy, getting component which is not optimal.");
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
+        spriteRenderer.sprite = config.sprite;
+
+        if (boxCollider == null)
+        {
+            Debug.LogWarning("Box Collider 2D is not assigned for the enemy, getting component which is not optimal.");
+            boxCollider = GetComponent<BoxCollider2D>();
+        }
+        boxCollider.enabled = true; // Ensure the collider is enabled
     }
 }

@@ -77,6 +77,10 @@ public class EnemySpawner : MonoBehaviour
     // Spawn enemies for the current level
     private void SpawnEnemyFromPool()
     {
+        if (currentLevelIndex < 0 || currentLevelIndex >= gameManager.LevelConfig.Length)
+            return;
+        if (gameManager.LevelConfig[currentLevelIndex] == null)
+            return;
         var levelConfig = gameManager.LevelConfig[currentLevelIndex];
         rows = levelConfig.maxEnemies / levelConfig.rows;
         columns = levelConfig.maxEnemiesPerRow;
