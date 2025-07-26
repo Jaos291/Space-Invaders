@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerBullet: 0
   speed: 0.75
-  damage: 1
-  lifetime: 5
+  damage: 10
+  lifetime: 15
   fireRate: 1
   bulletSprite: {fileID: 21300000, guid: 516db049bcb9e504cbb89110ec04594b, type: 3}

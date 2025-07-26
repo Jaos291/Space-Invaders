@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameUIController : MonoBehaviour
 {
@@ -17,9 +18,9 @@ public class GameUIController : MonoBehaviour
         EnemySpawner.OnLevelChanged -= SetLevel;
     }
     [SerializeField] private Image playerSprite;
-    [SerializeField] private Text livesText;
-    [SerializeField] private Text levelText;
-    [SerializeField] private Text scoreText;
+    [SerializeField] private TextMeshProUGUI livesText;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
     public void SetPlayerSprite(Sprite sprite)
     {
@@ -28,16 +29,16 @@ public class GameUIController : MonoBehaviour
 
     public void SetLives(int lives)
     {
-        livesText.text = $"Lives: {lives}";
+        livesText.text = lives.ToString();
     }
 
     public void SetLevel(int level)
     {
-        levelText.text = $"Level: {level}";
+        levelText.text = level.ToString();
     }
 
     public void SetScore(int score)
     {
-        scoreText.text = $"Score: {score}";
+        scoreText.text = score.ToString();
     }
 }

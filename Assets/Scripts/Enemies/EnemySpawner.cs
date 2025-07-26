@@ -12,11 +12,19 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int rowDivisor = 2;
     [SerializeField] private int rowOffset = 1;
 
-    private int column;
+    private int rows;
+    private int columns;
+    private float levelSpeed;
     private List<Enemy> spawnedEnemies = new List<Enemy>();
     private int defeatedEnemies = 0;
+    private GameManager gameManager;
 
     public static event System.Action<int> OnLevelChanged;
+
+    private void Awake()
+    {
+        gameManager = GameManager.Instance;
+    }
 
     private void Start()
     {
@@ -26,18 +34,14 @@ public class EnemySpawner : MonoBehaviour
     public void NotifyEnemyDefeated()
     {
         defeatedEnemies++;
-        Debug.Log($"Enemigos derrotados: {defeatedEnemies}");
-        var levelConfigs = GameManager.Instance.LevelConfig;
-        var levelConfig = levelConfigs[Mathf.Clamp(currentLevelIndex, 0, levelConfigs.Length - 1)];
-        if (defeatedEnemies >= levelConfig.maxEnemies)
+        if (defeatedEnemies >= gameManager.LevelConfig[currentLevelIndex].maxEnemies)
         {
             currentLevelIndex++;
-            OnLevelChanged?.Invoke(currentLevelIndex+1);
+            OnLevelChanged?.Invoke(currentLevelIndex);
             defeatedEnemies = 0;
             spawnedEnemies.Clear();
             playerBulletPooling?.ReturnAllBulletsToPool();
             enemyBulletPooling?.ReturnAllBulletsToPool();
-            enemyGroupController = FindObjectOfType<EnemyGroupController>();
             enemyGroupController.enabled = true;
             SpawnEnemyFromPool();
         }
@@ -45,23 +49,18 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemyFromPool()
     {
-        var levelConfigs = GameManager.Instance.LevelConfig;
-        var levelConfig = levelConfigs[Mathf.Clamp(currentLevelIndex, 0, levelConfigs.Length - 1)];
-        int rows = levelConfig.maxEnemies / levelConfig.rows;
-        int columns = levelConfig.maxEnemiesPerRow;
-        float levelSpeed = levelConfig.levelSpeed;
+        var levelConfig = gameManager.LevelConfig[currentLevelIndex];
+        rows = levelConfig.maxEnemies / levelConfig.rows;
+        columns = levelConfig.maxEnemiesPerRow;
+        levelSpeed = levelConfig.levelSpeed;
 
-        enemyGroupController = FindObjectOfType<EnemyGroupController>();
-        if (enemyGroupController == null) return;
         enemyGroupController.enabled = true;
-
         spawnedEnemies.Clear();
         for (int j = 0; j < (rows / rowDivisor)-rowOffset; j++)
         {
             for (int i = 0; i < columns; i++)
             {
                 var Enemy = GameManager.Instance.EnemyPool.GetEnemy();
-                // Aquí deberías usar PositionManager para obtener la posición inicial
                 Vector3 startingPosition = GetInitialPositionFromManager(j, i, columns, rows); 
                 Enemy.transform.position = startingPosition;
 
@@ -75,9 +74,6 @@ public class EnemySpawner : MonoBehaviour
 
     private Vector3 GetInitialPositionFromManager(int row, int col, int columns, int rows)
     {
-        // Aquí deberías consultar a tu PositionManager para la posición inicial
-        // Por ahora, se mantiene la lógica anterior como fallback
-        // return PositionManager.Instance.GetEnemyPosition(row, col);
         return new Vector3(columns + col, rows - row, 0);
     }
 }

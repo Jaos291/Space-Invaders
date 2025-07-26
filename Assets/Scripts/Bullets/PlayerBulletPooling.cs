@@ -10,10 +10,12 @@ public class PlayerBulletPooling : MonoBehaviour
     private Queue<GameObject> playerBullets = new Queue<GameObject>();
 
     public static PlayerBulletPooling Instance { get; private set; }
+    private GameManager gameManager;
 
     private void Awake()
     {
         Instance = this;
+        gameManager = GameManager.Instance;
         GrowPool();
     }
 
@@ -40,14 +42,14 @@ public class PlayerBulletPooling : MonoBehaviour
 
         var instance = playerBullets.Dequeue();
         instance.SetActive(true);
-        instance.transform.SetParent(GameManager.Instance.playerBulletsParent); // Attach to player bullets parent
+        instance.transform.SetParent(gameManager.playerBulletsParent); // Attach to player bullets parent
         return instance;
     }
 
     public void ReturnAllBulletsToPool()
     {
         // Return all active bullets under the player bullets parent to the pool
-        foreach (Transform bullet in GameManager.Instance.playerBulletsParent)
+        foreach (Transform bullet in gameManager.playerBulletsParent)
         {
             if (bullet.gameObject.activeInHierarchy)
                 AddToPool(bullet.gameObject);

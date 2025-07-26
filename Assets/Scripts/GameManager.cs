@@ -10,9 +10,11 @@ public class GameManager : MonoBehaviour
     public Transform enemiesBulletsParent;
     [SerializeField] private LevelConfig[] levelConfig;
     [SerializeField] private EnemyPool enemyPool;
-    [SerializeField] public GameObject player;
+    
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private EnemyGroupController enemyGroupController;
 
+    public GameObject player;
     public static GameManager Instance { get; private set; }
     public LevelConfig[] LevelConfig => levelConfig;
     public EnemyPool EnemyPool => enemyPool;

@@ -24,6 +24,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private PlayerBulletPooling playerBulletPooling;
     [SerializeField] private Transform bulletSpawnPoint;
 
+    [Header("Animations")]
+    [SerializeField] private int blinkTimesFromDamage = 15; 
+    [SerializeField] private float blinkTime = 0.2f;
+    private float timer = 0f;
+
     [SerializeField]private PlayerInput playerInput;
     private Vector2 moveInput;
     private float moveHorizontal;
@@ -110,13 +115,18 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        TakeDamage(10);
+    }
+
     private IEnumerator InvulnerabilityCoroutine()
     {
         canPlay = false;
         boxCollider2D.enabled = false;
-        float blinkTime = 0.2f;
-        float timer = 0f;
-        for (int i = 0; i < 15; i++)
+        blinkTime = 0.2f;
+        timer = 0f;
+        for (int i = 0; i < blinkTimesFromDamage; i++)
         {
             spriteRenderer.enabled = !spriteRenderer.enabled;
             yield return new WaitForSeconds(blinkTime);
