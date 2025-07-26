@@ -153,4 +153,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         Score += amount;
         OnScoreChanged?.Invoke(Score);
     }
+
+    public void AddLife()
+    {
+        lives++;
+        OnLivesChanged?.Invoke(lives);
+    }
 }

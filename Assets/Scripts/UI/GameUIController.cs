@@ -17,15 +17,20 @@ public class GameUIController : MonoBehaviour
         PlayerController.OnScoreChanged -= SetScore;
         EnemySpawner.OnLevelChanged -= SetLevel;
     }
-    [SerializeField] private Image[] playerSprite;
+    [SerializeField] private Image playerSprite;
     [SerializeField] private TextMeshProUGUI livesText;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private float widthPerLife = 20f;
 
     public void SetLives(int lives)
     {
-        playerSprite[lives].gameObject.SetActive(false);
         livesText.text = lives.ToString();
+        if (playerSprite != null)
+        {
+            var rect = playerSprite.rectTransform;
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, lives * widthPerLife);
+        }
     }
 
     public void SetLevel(int level)

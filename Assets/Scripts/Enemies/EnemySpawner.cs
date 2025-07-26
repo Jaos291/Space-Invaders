@@ -37,6 +37,12 @@ public class EnemySpawner : MonoBehaviour
         defeatedEnemies++;
         if (defeatedEnemies >= gameManager.LevelConfig[currentLevelIndex].maxEnemies)
         {
+            if (gameManager.player != null)
+            {
+                var playerController = gameManager.player.GetComponent<PlayerController>();
+                if (playerController != null)
+                    playerController.AddLife();
+            }
             currentLevelIndex++;
             OnLevelChanged?.Invoke(currentLevelIndex + 1);
             defeatedEnemies = 0;
