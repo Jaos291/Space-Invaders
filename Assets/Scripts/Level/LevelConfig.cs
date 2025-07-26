@@ -7,7 +7,6 @@ public class LevelConfig : ScriptableObject
 {
     public int currentLevel;
     public float levelSpeed;
-    public int initialCountdown;
     public int maxEnemies;
     public int maxEnemiesPerRow;
     public int rows;
