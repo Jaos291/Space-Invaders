@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class EnemyGroupController : MonoBehaviour
 {
+    // --- Serialized fields ---
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float moveDistance = 0.2f;
     [SerializeField] private float moveDownDistance = 0.5f;
@@ -10,26 +11,35 @@ public class EnemyGroupController : MonoBehaviour
     [SerializeField] private float leftBound = -8f;
     [SerializeField] private float rightBound = 8f;
 
+    // --- Private fields ---
     private List<Enemy> enemies = new List<Enemy>();
     private bool movingRight = true;
     private float moveTimer;
     private GameManager gameManager;
 
+    // --- Unity event methods ---
+    // Setup reference to GameManager
     private void Start()
     {
         gameManager = GameManager.Instance;
     }
+
+    // --- Public methods ---
+    // Register a new enemy to the group
     public void RegisterEnemy(Enemy enemy)
     {
         if (!enemies.Contains(enemy))
             enemies.Add(enemy);
     }
 
+    // Set the interval between group moves
     public void SetMoveInterval(float interval)
     {
         moveInterval = interval;
     }
 
+    // --- Unity Update ---
+    // Handles group movement timing
     private void Update()
     {
         if (!gameManager.canPlay) return;
@@ -43,6 +53,8 @@ public class EnemyGroupController : MonoBehaviour
         }
     }
 
+    // --- Private methods ---
+    // Move the group horizontally or down
     private void MoveGroup()
     {
         float edge = movingRight ? GetRightmostX() : GetLeftmostX();
@@ -68,6 +80,7 @@ public class EnemyGroupController : MonoBehaviour
         }
     }
 
+    // Get the leftmost X position among active enemies
     private float GetLeftmostX()
     {
         float min = float.MaxValue;
@@ -79,6 +92,7 @@ public class EnemyGroupController : MonoBehaviour
         return min;
     }
 
+    // Get the rightmost X position among active enemies
     private float GetRightmostX()
     {
         float max = float.MinValue;

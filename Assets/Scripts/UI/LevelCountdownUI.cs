@@ -5,26 +5,34 @@ using UnityEngine.UI;
 
 public class LevelCountdownUI : MonoBehaviour
 {
+    // --- Serialized fields ---
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private GameObject backgroundObject;
     [SerializeField] private float countdownTime = 1f;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject victoryScreen;
     [SerializeField] private TextMeshProUGUI victoryScoreText;
+
+    // --- Private fields ---
     private Coroutine countdownCoroutine;
 
+    // --- Unity event methods ---
+    // Subscribe to events
     private void OnEnable()
     {
         EnemySpawner.OnLevelChanged += OnLevelChanged;
         PlayerController.OnPlayerDied += OnPlayerDied;
     }
 
+    // Unsubscribe from events
     private void OnDisable()
     {
         EnemySpawner.OnLevelChanged -= OnLevelChanged;
         PlayerController.OnPlayerDied -= OnPlayerDied;
     }
 
+    // --- Event handlers ---
+    // Called when level changes, triggers countdown or victory
     private void OnLevelChanged(int level)
     {
         if (level > GameManager.Instance.LevelConfig.Length)
@@ -43,12 +51,15 @@ public class LevelCountdownUI : MonoBehaviour
         StartCountdown();
     }
 
+    // Called on player death, shows game over UI
     private void OnPlayerDied()
     {
         if (gameOverUI != null)
             gameOverUI.SetActive(true);
     }
 
+    // --- Public methods ---
+    // Show victory UI and score
     public void ShowVictoryScreen(int score)
     {
         if (victoryScreen != null)
@@ -57,10 +68,13 @@ public class LevelCountdownUI : MonoBehaviour
             victoryScoreText.text = score.ToString();
     }
 
+    // Public trigger for countdown (e.g. from button)
     public void StartCountdownForUI()
     {
         StartCountdown();
     }
+
+    // Start countdown with optional callback
     public void StartCountdown(System.Action onComplete = null)
     {
         if (countdownCoroutine != null)
@@ -68,6 +82,8 @@ public class LevelCountdownUI : MonoBehaviour
         countdownCoroutine = StartCoroutine(CountdownRoutine(onComplete));
     }
 
+    // --- Countdown coroutine ---
+    // Coroutine for countdown display and canPlay control
     private IEnumerator CountdownRoutine(System.Action onComplete)
     {
         backgroundObject.SetActive(true);

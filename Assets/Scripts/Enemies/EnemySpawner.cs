@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    // --- Serialized fields ---
     [SerializeField] private LevelCountdownUI levelCountdownUI;
     [SerializeField] private PlayerBulletPooling playerBulletPooling;
     [SerializeField] private EnemyBulletPooling enemyBulletPooling;
@@ -13,6 +14,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private int rowDivisor = 2;
     [SerializeField] private int rowOffset = 1;
 
+    // --- Private fields ---
     private int rows;
     private int columns;
     private float levelSpeed;
@@ -20,18 +22,23 @@ public class EnemySpawner : MonoBehaviour
     private int defeatedEnemies = 0;
     private GameManager gameManager;
 
+    // --- Events ---
     public static event System.Action<int> OnLevelChanged;
 
+    // --- Unity event methods ---
+    // Setup reference to GameManager
     private void Awake()
     {
         gameManager = GameManager.Instance;
     }
 
+    // Start first level with countdown
     private void Start()
     {
         StartLevelWithCountdown();
     }
 
+    // Called when an enemy is defeated
     public void NotifyEnemyDefeated()
     {
         defeatedEnemies++;
@@ -53,6 +60,8 @@ public class EnemySpawner : MonoBehaviour
             StartLevelWithCountdown();
         }
     }
+
+    // Start countdown or spawn enemies
     private void StartLevelWithCountdown()
     {
         if (levelCountdownUI != null)
@@ -65,6 +74,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    // Spawn enemies for the current level
     private void SpawnEnemyFromPool()
     {
         var levelConfig = gameManager.LevelConfig[currentLevelIndex];
@@ -82,7 +92,7 @@ public class EnemySpawner : MonoBehaviour
             for (int i = 0; i < columns; i++)
             {
                 var Enemy = GameManager.Instance.EnemyPool.GetEnemy();
-                Vector3 startingPosition = GetInitialPositionFromManager(j, i, columns, rows); 
+                Vector3 startingPosition = GetInitialPositionFromManager(j, i, columns, rows);
                 Enemy.transform.position = startingPosition;
 
                 var enemy = Enemy.GetComponent<Enemy>();
@@ -93,6 +103,7 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    // Calculate initial position for each enemy
     private Vector3 GetInitialPositionFromManager(int row, int col, int columns, int rows)
     {
         return new Vector3(columns + col, rows - row, 0);

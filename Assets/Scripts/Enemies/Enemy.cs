@@ -103,41 +103,4 @@ public class Enemy : MonoBehaviour, IDamageable
         }
         GameManager.Instance.EnemyPool.AddToPool(gameObject);
     }
-
-    public void ResetValues()
-    {
-        //reseting values to ensure playability 
-        speed = config.speed;
-        health = config.health;
-
-        if (spriteRenderer.Equals(null))
-        {
-            Debug.LogWarning("Sprite Renderer is not assigned for the enemy, getting component which is not optimal.");
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            spriteRenderer.sprite = config.sprite;
-        }
-        else
-        {
-            spriteRenderer.sprite = config.sprite;
-        }
-
-        if (boxCollider.Equals(null))
-        {
-            Debug.LogWarning("Box Collider 2D is not assigned for the enemy, getting component which is not optimal.");
-            boxCollider = GetComponent<BoxCollider2D>();
-        }
-        else
-        {
-            boxCollider.enabled = true; // Ensure the collider is enabled
-        }
-    }
-
-    public void TakeDamage(int damageAmount)
-    {
-        health -= damageAmount;
-        if (health <= 0)
-        {
-            Die();
-        }
-    }
 }

@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    // --- Serialized fields ---
     [SerializeField] private BulletConfig bulletConfig;
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private Rigidbody2D rigidbody2D;
 
+    // --- Private fields ---
     private float direction;
 
+    // --- Public fields ---
     [HideInInspector] public PlayerBulletPooling playerBulletPooling;
     [HideInInspector] public EnemyBulletPooling enemyBulletPooling;
 
+    // --- Unity event methods ---
+    // Setup and validate components
     private void Awake()
     {
         if (spriteRenderer.Equals(null))
@@ -37,6 +42,7 @@ public class Bullet : MonoBehaviour
         spriteRenderer.sprite = bulletConfig.bulletSprite; // Set the bullet sprite from the configuration
     }
 
+    // On enable, set up bullet direction and velocity
     private void OnEnable()
     {
         if (!bulletConfig.isPlayerBullet)
@@ -47,25 +53,29 @@ public class Bullet : MonoBehaviour
         InitializeBullet();
     }
 
+    // Reset velocity when bullet is disabled
     private void OnDisable()
     {
-        rigidbody2D.velocity = Vector2.zero; // Reset velocity when bullet is disabled
+        rigidbody2D.velocity = Vector2.zero;
     }
 
+    // --- Private methods ---
+    // Initialize bullet movement and start return coroutine
     private void InitializeBullet()
     {
-
         direction = bulletConfig.isPlayerBullet ? 1f : -1f; // Set direction based on bullet type
         rigidbody2D.velocity = Vector2.up * bulletConfig.speed * direction; // Set initial velocity
         StartCoroutine(returnBulletAfterTime()); // Start coroutine to return bullet after its lifetime 
     }
 
+    // Coroutine to return bullet to pool after lifetime
     private IEnumerator returnBulletAfterTime()
     {
         yield return new WaitForSeconds(bulletConfig.lifetime);
         ReturnToPool(bulletConfig.isPlayerBullet); // Return bullet to the pool after its lifetime
     }
 
+    // Handle collision with other objects
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!bulletConfig.isPlayerBullet)
@@ -74,10 +84,11 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            ReturnToPool(true); // Return enemy bullet to the pool
+            ReturnToPool(true); // Return player bullet to the pool
         }
     }
 
+    // Return bullet to the correct pool
     private void ReturnToPool(bool isPlayerBullet)
     {
         if (!isPlayerBullet)

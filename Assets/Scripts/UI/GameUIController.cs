@@ -4,6 +4,14 @@ using TMPro;
 
 public class GameUIController : MonoBehaviour
 {
+    // --- Serialized fields ---
+    [SerializeField] private Image playerSprite;
+    [SerializeField] private TextMeshProUGUI livesText;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private float widthPerLife = 20f;
+
+    // --- Unity event methods ---
     private void OnEnable()
     {
         PlayerController.OnLivesChanged += SetLives;
@@ -17,12 +25,8 @@ public class GameUIController : MonoBehaviour
         PlayerController.OnScoreChanged -= SetScore;
         EnemySpawner.OnLevelChanged -= SetLevel;
     }
-    [SerializeField] private Image playerSprite;
-    [SerializeField] private TextMeshProUGUI livesText;
-    [SerializeField] private TextMeshProUGUI levelText;
-    [SerializeField] private TextMeshProUGUI scoreText;
-    [SerializeField] private float widthPerLife = 20f;
 
+    // --- UI update methods ---
     public void SetLives(int lives)
     {
         livesText.text = lives.ToString();

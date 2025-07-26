@@ -1147,7 +1147,6 @@ MonoBehaviour:
   health: 10
   lives: 3
   spriteRenderer: {fileID: 660673449}
-  canPlay: 1
   moveSpeed: 5
   sideBoundary:
   - 6.55
@@ -1159,6 +1158,7 @@ MonoBehaviour:
   blinkTimesFromDamage: 15
   blinkTime: 0.2
   playerInput: {fileID: 660673451}
+  canPlay: 1
 --- !u!114 &660673453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1180,7 +1180,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 660673448}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1
