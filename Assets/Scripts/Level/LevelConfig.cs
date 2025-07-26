@@ -9,7 +9,7 @@ public class LevelConfig : ScriptableObject
     // --- Public fields ---
     public int currentLevel;
     public float levelSpeed;
-    public int maxEnemies;
-    public int maxEnemiesPerRow;
-    public int rows;
+    [HideInInspector]public int maxEnemies = 40;
+    [HideInInspector] public int maxEnemiesPerRow=10;
+    [HideInInspector] public int rows=4;
 }
