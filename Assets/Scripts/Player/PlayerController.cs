@@ -143,6 +143,11 @@ public class PlayerController : MonoBehaviour, IDamageable
         canPlay = true;
     }
 
+    public void PublicDie()
+    {
+        Die();
+    }
+
     private void Die()
     {
         OnPlayerDied?.Invoke();

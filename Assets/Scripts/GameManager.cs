@@ -14,8 +14,13 @@ public class GameManager : MonoBehaviour
     
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private EnemyGroupController enemyGroupController;
+    [SerializeField] private BoxCollider2D gameOverAreaCollilder;
+
+    [Header("Game Configuration")]
+    public int scorePerEnemy=100;
 
     public GameObject player;
+    private PlayerController playerController;
     public bool canPlay = false;
     public static GameManager Instance { get; private set; }
     public LevelConfig[] LevelConfig => levelConfig;
@@ -34,7 +39,17 @@ public class GameManager : MonoBehaviour
 
     private void Initialize()
     {
-        
+        playerController = player.GetComponent<PlayerController>();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        canPlay = false;
+        if (playerController != null)
+        {
+            playerController.PublicDie();
+        }
+
     }
 
     public void ResetGame()

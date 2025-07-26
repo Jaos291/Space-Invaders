@@ -99,7 +99,7 @@ public class Enemy : MonoBehaviour, IDamageable
             GameManager.Instance.EnemySpawner.NotifyEnemyDefeated();
             var player = GameManager.Instance.player.GetComponent<PlayerController>();
             if (player != null)
-                player.AddScore(100);
+                player.AddScore(gameManager.scorePerEnemy);
         }
         GameManager.Instance.EnemyPool.AddToPool(gameObject);
     }

@@ -25,6 +25,11 @@ public class EnemyGroupController : MonoBehaviour
             enemies.Add(enemy);
     }
 
+    public void SetMoveInterval(float interval)
+    {
+        moveInterval = interval;
+    }
+
     private void Update()
     {
         if (!gameManager.canPlay) return;

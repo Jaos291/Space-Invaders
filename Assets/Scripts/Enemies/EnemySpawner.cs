@@ -72,6 +72,9 @@ public class EnemySpawner : MonoBehaviour
         columns = levelConfig.maxEnemiesPerRow;
         levelSpeed = levelConfig.levelSpeed;
 
+        if (enemyGroupController != null)
+            enemyGroupController.SetMoveInterval(1f / levelSpeed);
+
         enemyGroupController.enabled = true;
         spawnedEnemies.Clear();
         for (int j = 0; j < (rows / rowDivisor)-rowOffset; j++)
