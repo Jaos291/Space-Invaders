@@ -5,13 +5,15 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private LevelConfig levelConfig;
+    [SerializeField] private LevelConfig[] levelConfig;
     [SerializeField] private EnemyPool enemyPool;
     [SerializeField] private GameObject player;
+    [SerializeField] private EnemySpawner enemySpawner;
 
     public static GameManager Instance { get; private set; }
-    public LevelConfig LevelConfig => levelConfig;
+    public LevelConfig[] LevelConfig => levelConfig;
     public EnemyPool EnemyPool => enemyPool;
+    public EnemySpawner EnemySpawner => enemySpawner;
 
     private void Awake()
     {

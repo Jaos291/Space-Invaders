@@ -52,6 +52,8 @@ MonoBehaviour:
   boxCollider: {fileID: 1950688571450309850}
   rigidbody2D: {fileID: 8523878204987593017}
   enemyShootingPoint: {fileID: 0}
+  enemyBulletPool: {fileID: -7621848502566730407}
+  shootInterval: 30
   config: {fileID: 11400000, guid: 3543ccaa9fc812543b8382ffcc8ec547, type: 2}
 --- !u!212 &1950688571450309853
 SpriteRenderer:

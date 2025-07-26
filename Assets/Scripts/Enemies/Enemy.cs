@@ -5,21 +5,26 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IDamageable
 {
-
     [Header("References")]
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private BoxCollider2D boxCollider;
     [SerializeField] private Rigidbody2D rigidbody2D;
     [SerializeField] private Transform enemyShootingPoint;
+    [Header("Bullet Pooling")]
+    [SerializeField] private EnemyBulletPooling enemyBulletPool;
 
     private float speed;
     private float health;
+    [SerializeField] private float shootInterval = 2f;
+    private float shootIntervalBase = 2f;
+    private float shootTimer;
 
     [Header("Enemy Configuration File")]
     public EnemyConfig config;
 
     private void Awake()
     {
+        shootIntervalBase = shootInterval;
         if(spriteRenderer == null)
         {
             Debug.LogWarning("Sprite Renderer is not assigned for the enemy, getting component which is not optimal.");
@@ -38,15 +43,41 @@ public class Enemy : MonoBehaviour, IDamageable
             rigidbody2D = GetComponent<Rigidbody2D>();
         }
     }
+    public void ApplyLevelMultipliers(float speedMultiplier, float shootMultiplier)
+    {
+        shootInterval = shootIntervalBase / shootMultiplier;
+        speed = config.speed * speedMultiplier;
+    }
 
     private void OnEnable()
     {
         Initialize();
+        shootTimer = UnityEngine.Random.Range(0f, shootInterval); // Para que no disparen todos sincronizados
     }
 
     private void Initialize()
     {
         ResetValues();
+    }
+
+    private void Update()
+    {
+        shootTimer += Time.deltaTime;
+        if (shootTimer >= shootInterval)
+        {
+            Shoot();
+            shootTimer = 0f;
+        }
+    }
+    private void Shoot()
+    {
+        if (enemyBulletPool == null) return;
+        var bullet = enemyBulletPool.GetBullet();
+        if (bullet != null)
+        {
+            bullet.transform.position = enemyShootingPoint != null ? enemyShootingPoint.position : transform.position;
+            bullet.SetActive(true);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -57,8 +88,10 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        boxCollider.enabled = false; // Disable collider to prevent further interactions
+        boxCollider.enabled = false;
         ResetValues();
+        if (GameManager.Instance != null && GameManager.Instance.EnemySpawner != null)
+            GameManager.Instance.EnemySpawner.NotifyEnemyDefeated();
         GameManager.Instance.EnemyPool.AddToPool(gameObject);
     }
 

@@ -12,7 +12,7 @@ public class EnemyGroupController : MonoBehaviour
 
     private List<Enemy> enemies = new List<Enemy>();
     private bool movingRight = true;
-    private float lastMoveTime;
+    private float moveTimer;
 
     public void RegisterEnemy(Enemy enemy)
     {
@@ -22,10 +22,13 @@ public class EnemyGroupController : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time - lastMoveTime > moveInterval && enemies.Count > 0)
+        if (enemies.Count == 0) return;
+
+        moveTimer += Time.deltaTime;
+        if (moveTimer > moveInterval)
         {
             MoveGroup();
-            lastMoveTime = Time.time;
+            moveTimer = 0f;
         }
     }
 

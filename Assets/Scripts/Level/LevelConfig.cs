@@ -6,7 +6,7 @@ using UnityEngine;
 public class LevelConfig : ScriptableObject
 {
     public int currentLevel;
-    public int levelSpeed;
+    public float levelSpeed;
     public int initialCountdown;
     public int maxEnemies;
     public int maxEnemiesPerRow;
