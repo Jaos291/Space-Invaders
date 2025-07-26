@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private EnemyGroupController enemyGroupController;
 
     public GameObject player;
+    public bool canPlay = false;
     public static GameManager Instance { get; private set; }
     public LevelConfig[] LevelConfig => levelConfig;
     public EnemyPool EnemyPool => enemyPool;
@@ -37,8 +39,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetGame()
     {
-        // Reset game logic here
-        // For example, reset scores, player state, etc.
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         Debug.Log("Game has been started, reseted or level restarted.");
     }
 }

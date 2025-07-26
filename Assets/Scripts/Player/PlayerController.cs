@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private int lives = 3;
     [SerializeField] private SpriteRenderer spriteRenderer;
     public bool canPlay = true;
-    private int score = 0;
+    private int Score = 0;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float[] sideBoundary;
     [SerializeField] private Rigidbody2D rigidbody2D;
@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour, IDamageable
     private float posX;
     private Vector3 initialPosition;
     private GameObject bullet;
+    private GameManager gameManager;
+
+    public int score => Score;
 
     private void Awake()
     {
@@ -60,6 +63,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Start()
     {
         initialPosition = transform.position;
+        gameManager = GameManager.Instance;
     }
 
     private void Update()
@@ -73,6 +77,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void Shoot()
     {
+        if (!gameManager.canPlay) return;
         bullet = playerBulletPooling.GetBullet();
         bullet.transform.position = bulletSpawnPoint.position;
         Debug.Log("Player is shooting.");
@@ -80,6 +85,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void MovePlayer()
     {
+        if (!gameManager.canPlay) return;
         moveInput = playerInput.actions["Movement"].ReadValue<Vector2>();
         moveHorizontal = moveInput.x * moveSpeed * Time.deltaTime;
         posX = transform.position.x + moveHorizontal;
@@ -144,7 +150,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     }
     public void AddScore(int amount)
     {
-        score += amount;
-        OnScoreChanged?.Invoke(score);
+        Score += amount;
+        OnScoreChanged?.Invoke(Score);
     }
 }

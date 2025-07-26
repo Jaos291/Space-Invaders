@@ -15,8 +15,12 @@ public class PlayerBulletPooling : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        gameManager = GameManager.Instance;
         GrowPool();
+    }
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
     }
 
     private void GrowPool()

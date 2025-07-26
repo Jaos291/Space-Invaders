@@ -22,6 +22,8 @@ public class Enemy : MonoBehaviour, IDamageable
     [Header("Enemy Configuration File")]
     public EnemyConfig config;
 
+    private GameManager gameManager;
+
     private void Awake()
     {
         shootIntervalBase = shootInterval;
@@ -52,6 +54,7 @@ public class Enemy : MonoBehaviour, IDamageable
     private void OnEnable()
     {
         Initialize();
+        gameManager = GameManager.Instance;
         shootTimer = UnityEngine.Random.Range(0f, shootInterval); // Para que no disparen todos sincronizados
     }
 
@@ -62,6 +65,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     private void Update()
     {
+        if (gameManager == null || !gameManager.canPlay) return;
         shootTimer += Time.deltaTime;
         if (shootTimer >= shootInterval)
         {
@@ -71,6 +75,7 @@ public class Enemy : MonoBehaviour, IDamageable
     }
     private void Shoot()
     {
+        if (gameManager == null || !gameManager.canPlay) return;
         if (enemyBulletPool == null) return;
         var bullet = enemyBulletPool.GetBullet();
         if (bullet != null)
@@ -89,7 +94,6 @@ public class Enemy : MonoBehaviour, IDamageable
     private void Die()
     {
         boxCollider.enabled = false;
-        ResetValues();
         if (GameManager.Instance != null && GameManager.Instance.EnemySpawner != null)
         {
             GameManager.Instance.EnemySpawner.NotifyEnemyDefeated();

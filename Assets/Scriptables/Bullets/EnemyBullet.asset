@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnemyBullet
   m_EditorClassIdentifier: 
   isPlayerBullet: 0
-  speed: 0.75
+  speed: 1
   damage: 10
   lifetime: 15
   fireRate: 1

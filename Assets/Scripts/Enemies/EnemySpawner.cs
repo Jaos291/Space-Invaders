@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] private LevelCountdownUI levelCountdownUI;
     [SerializeField] private PlayerBulletPooling playerBulletPooling;
     [SerializeField] private EnemyBulletPooling enemyBulletPooling;
     [SerializeField] private Transform initialPosition;
@@ -28,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        SpawnEnemyFromPool();
+        StartLevelWithCountdown();
     }
 
     public void NotifyEnemyDefeated()
@@ -37,12 +38,23 @@ public class EnemySpawner : MonoBehaviour
         if (defeatedEnemies >= gameManager.LevelConfig[currentLevelIndex].maxEnemies)
         {
             currentLevelIndex++;
-            OnLevelChanged?.Invoke(currentLevelIndex);
+            OnLevelChanged?.Invoke(currentLevelIndex + 1);
             defeatedEnemies = 0;
             spawnedEnemies.Clear();
             playerBulletPooling?.ReturnAllBulletsToPool();
             enemyBulletPooling?.ReturnAllBulletsToPool();
             enemyGroupController.enabled = true;
+            StartLevelWithCountdown();
+        }
+    }
+    private void StartLevelWithCountdown()
+    {
+        if (levelCountdownUI != null)
+        {
+            levelCountdownUI.StartCountdown(SpawnEnemyFromPool);
+        }
+        else
+        {
             SpawnEnemyFromPool();
         }
     }

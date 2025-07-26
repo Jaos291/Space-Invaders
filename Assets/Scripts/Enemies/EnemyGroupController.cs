@@ -13,7 +13,12 @@ public class EnemyGroupController : MonoBehaviour
     private List<Enemy> enemies = new List<Enemy>();
     private bool movingRight = true;
     private float moveTimer;
+    private GameManager gameManager;
 
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
+    }
     public void RegisterEnemy(Enemy enemy)
     {
         if (!enemies.Contains(enemy))
@@ -22,6 +27,7 @@ public class EnemyGroupController : MonoBehaviour
 
     private void Update()
     {
+        if (!gameManager.canPlay) return;
         if (enemies.Count == 0) return;
 
         moveTimer += Time.deltaTime;

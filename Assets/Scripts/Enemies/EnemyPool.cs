@@ -33,6 +33,7 @@ public class EnemyPool : MonoBehaviour
 
     public void AddToPool(GameObject instance)
     {
+        instance.GetComponent<Enemy>().ResetValues();
         instance.SetActive(false);
         availableEnemies.Enqueue(instance);
     }
